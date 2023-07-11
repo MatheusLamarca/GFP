@@ -2,10 +2,13 @@ import React,{useState} from 'react'
 import * as C from "./style"
 
 
-const Form = () => {
+const Form = ({ handleAdd }) => {
     const [desc, setDesc] = useState("")
     const [amount, setAmount] = useState("")
     const [isExpense, setExpense] = useState(false)
+
+    const generateID = () => Math.round(Math.random() * 1000)
+
 
     const handleSave = () => {
         if (!desc || !amount) {
@@ -15,30 +18,59 @@ const Form = () => {
             alert("O valor tem que ser positivo!")
             return
         }
-    } 
 
-  return (
-    <>
+
+        const transaction = {
+          id: generateID(),
+          desc: desc,
+          amount: amount,
+          expense: isExpense,
+        }
+
+        handleAdd(transaction)
+
+        setDesc("")
+        setAmount("")
+
+    } 
+    
+
+    return (
+      <>
         <C.Container>
           <C.InputContent>
-            <C.Label>descrição</C.Label>
+            <C.Label>Descrição</C.Label>
             <C.Input value={desc} onChange={(e) => setDesc(e.target.value)} />
           </C.InputContent>
           <C.InputContent>
             <C.Label>Valor</C.Label>
-            <C.Input value={amount} type="number" onChange={(e) => setAmount(e.target.value)} />
+            <C.Input
+              value={amount}
+              type="number"
+              onChange={(e) => setAmount(e.target.value)}
+            />
           </C.InputContent>
           <C.RadioGroup>
-            <C.Input type='radio' id='rIncome' defaultChecked name='group1' onChange={() => setExpense(!isExpense)} 
+            <C.Input
+              type="radio"
+              id="rIncome"
+              defaultChecked
+              name="group1"
+              onChange={() => setExpense(!isExpense)}
             />
             <C.Label htmlFor="rIncome">Entrada</C.Label>
-            <C.Input type='radio' id='rExpenses' name='group1' onChange={() => setExpense(!isExpense) } />
-            <C.Label htmlFor="rExpenses">Saida</C.Label>
+            <C.Input
+              type="radio"
+              id="rExpenses"
+              name="group1"
+              onChange={() => setExpense(!isExpense)}
+            />
+            <C.Label htmlFor="rExpenses">Saída</C.Label>
           </C.RadioGroup>
-          <C.Button onClick={handleSave}>Somar</C.Button>
+          <C.Button onClick={handleSave}>ADICIONAR</C.Button>
         </C.Container>
-    </>
-  )
-}
-
+  
+      </>
+    );
+  };
 export default Form
